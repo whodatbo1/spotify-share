@@ -10,3 +10,6 @@ media
 
 ### React ###
 node_modules/
+
+### Spotify Credentials ###
+credentials.py
