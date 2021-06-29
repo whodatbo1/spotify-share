@@ -7,7 +7,7 @@ from requests import post, get, put
 BASE_URL = 'https://api.spotify.com/v1/me/'
 
 def get_user_tokens(session_id):
-    print("session_id", session_id)
+    # print("session_id", session_id)
     tokens =  SpotifyToken.objects.filter(user=session_id)
     if tokens.exists():
         return tokens[0]
@@ -57,20 +57,24 @@ def refresh_token(session_id):
 def send_request(session_id, endpoint, post_=False, put_=False):
     tokens = get_user_tokens(session_id)
 
+    response = None
+
     if tokens is None:
         return {'Error': "No token exists"}
     headers = {'Content-Type': 'application/json',
               'Authorization': tokens.token_type + ' ' + tokens.access_token}
     if post_:
-        post(BASE_URL + endpoint, headers=headers)
-    if put_:
-        put(BASE_URL + endpoint, headers=headers)
-    
-    response = get(BASE_URL + endpoint, {}, headers=headers)
+        response = post(BASE_URL + endpoint, headers=headers)
+    elif put_:
+        print('puts on spotify')
+        response = put(BASE_URL + endpoint, headers=headers)
+    else:
+        response = get(BASE_URL + endpoint, {}, headers=headers)
     
     try:
         return response.json()
     except:
+        print(response.headers, response.reason)
         return {'Error': response.status_code}
 
     

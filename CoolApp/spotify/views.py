@@ -27,16 +27,70 @@ class AuthURLView(APIView):
 
 def get_song_info(code):
     try:
-        response = post('https://api.spotify.com/v1/me', headers={
-            'Authorization': 'Bearer ' + code
-        }).json()
+        response = send_request()
         return redirect('FrontEnd:')
     except Exception as e:
         print(e)
     return redirect('FrontEnd:')
 
-def pause():
-    
+def pause(code):
+    try:
+        response = put('https://api.spotify.com/v1/me/player/pause', headers = {
+            'Authorization': 'Bearer ' + code
+        }).json()
+        return redirect('Frontend:')
+    except Exception as e:
+        print(e)
+    return redirect('FrontEnd:')   
+
+def play(code):
+    try:
+        response = put('https://api.spotify.com/v1/me/player/play', headers = {
+            'Authorization': 'Bearer ' + code
+        }).json()
+        return redirect('Frontend:')
+    except Exception as e:
+        print(e)
+    return redirect('FrontEnd:') 
+
+def nextTrack(code):
+    try:
+        response = put('https://api.spotify.com/v1/me/player/next', headers = {
+            'Authorization': 'Bearer ' + code
+        }).json()
+        return redirect('Frontend:')
+    except Exception as e:
+        print(e)
+    return redirect('FrontEnd:')   
+
+def previous(code):
+    try:
+        response = put('https://api.spotify.com/v1/me/player/previous', headers = {
+            'Authorization': 'Bearer ' + code
+        }).json()
+        return redirect('Frontend:')
+    except Exception as e:
+        print(e)
+    return redirect('FrontEnd:')   
+
+class ChangePlayback(APIView):
+    def get(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)
+        if room.exists():
+            room = room[0]
+        else:
+            return Response({"Error"}, status=status.HTTP_404_NOT_FOUND)
+        host = room.host
+
+        endpoint = 'player/' + self.request.headers.get('type')
+        print(endpoint)
+
+        response = send_request(host, endpoint, put_=True, post_=False  )
+
+        print('res', response)
+
+        return Response()
 
 class CurrentSong(APIView):
     def get(self, request, format=None):
@@ -70,7 +124,7 @@ class CurrentSong(APIView):
         track_name = response.get('item').get('name')
         is_playing = response.get('is_playing')
 
-        print("ac", item)
+        # print("ac", item)
         info = {'album_cover': album_cover,
                 'album_name': album_name,
                 'album_date': album_date,

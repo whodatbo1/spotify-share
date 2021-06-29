@@ -15,10 +15,54 @@ export default class Player extends Component{
         this.back = this.back.bind(this);
     }
 
-    play(){}
-    pause(){}
-    skip(){}
-    back(){}
+    play(){
+        console.log('play')
+        fetch("/auth/playback", {
+            method: 'GET',
+            headers: {
+                'type': "play"
+            }
+        })
+        .then((res) => {
+            console.log(res);
+        })
+    }
+    pause(){
+        console.log('pause')
+        fetch("/auth/playback", {
+            method: 'GET',
+            headers: {
+                'type': "pause"
+            }
+        })
+        .then((res) => {
+            console.log(res);
+        })
+    }
+    skip(){
+        console.log('next')
+        fetch("/auth/playback", {
+            method: 'GET',
+            headers: {
+                'type': "next"
+            }
+        })
+        .then((res) => {
+            console.log(res);
+        })
+    }
+    back(){
+        console.log('previous')
+        fetch("/auth/playback", {
+            method: 'GET',
+            headers: {
+                'type': "previous"
+            }
+        })
+        .then((res) => {
+            console.log(res);
+        })
+    }
 
     render() {
 
@@ -38,13 +82,13 @@ export default class Player extends Component{
                             {this.props.artist_name}
                         </mUI.Typography>
                         <div>
-                            <mUI.IconButton>
+                            <mUI.IconButton onClick={this.back}>
                                 <icons.SkipPrevious/>
                             </mUI.IconButton>
-                            <mUI.IconButton>
+                            <mUI.IconButton onClick={this.play}>
                                 {this.props.is_playing ? <icons.PauseCircleOutlineSharp/> : <icons.PlayArrow/>}
                             </mUI.IconButton>
-                            <mUI.IconButton>
+                            <mUI.IconButton onClick={this.skip}>
                                 <icons.SkipNext/>
                             </mUI.IconButton>
                         </div>

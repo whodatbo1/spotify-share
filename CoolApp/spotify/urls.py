@@ -7,5 +7,10 @@ urlpatterns = [
     path('is-auth', IsAuthenticated.as_view()),
     path('get-all', GetAllTokens.as_view()),
     path('get-song', get_song_info),
-    path('curr-song', CurrentSong.as_view())
+    path('curr-song', CurrentSong.as_view()),
+    path('pause', pause),
+    path('play', play),
+    path('next', nextTrack),
+    path('previous', previous),
+    path('playback', ChangePlayback.as_view()),
 ]

@@ -109,7 +109,7 @@ export default class Room extends Component{
             );
             if (this.state.is_host){
                 this.authenticate_spotify()
-                console.log("nice")
+                // console.log("nice")
             }
         });
     }
